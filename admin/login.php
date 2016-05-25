@@ -23,7 +23,7 @@ if(isset($_POST['nombre_usuario'])){
 
 $html .= ' <div class="login-container">
             <div class="login-box animated fadeInDown">
-                <div class="login-logo"></div>
+
                 <div class="login-body">
                     '.$mensaje.'
                     <div class="login-title"><strong>Bienvenido</strong>, Porfavor ingresa</div>
@@ -40,7 +40,9 @@ $html .= ' <div class="login-container">
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
-                            <a href="#" class="btn btn-link btn-block">Olvidaste tu contraseña?</a>
+                            <a href="/admin/registro.php" class="btn btn-link btn-block">
+                              Registro
+                            </a>
                         </div>
                         <div class="col-md-6">
                             <button class="btn btn-info btn-block">Ingresar</button>
@@ -50,12 +52,7 @@ $html .= ' <div class="login-container">
                 </div>
                 <div class="login-footer">
                     <div class="pull-left">
-                        &copy; 2016 Videoteca
-                    </div>
-                    <div class="pull-right">
-                        <a href="#">About</a> |
-                        <a href="#">Privacy</a> |
-                        <a href="#">Contact Us</a>
+                        &copy; 2016 Proyecto Redes
                     </div>
                 </div>
             </div>

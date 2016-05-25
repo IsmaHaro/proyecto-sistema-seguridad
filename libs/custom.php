@@ -153,9 +153,9 @@ function sql_query($query){
 
 function sql_get($query){
 	try{
-			$r = sql_query($query);
+		$r = sql_query($query);
 
-			return mysqli_fetch_assoc($r);
+		return mysqli_fetch_assoc($r);
 
 	}catch(Exception $e){
 		throw new Exception('sql_get(): Error '.$e);
@@ -163,11 +163,11 @@ function sql_get($query){
 }
 
 function controlador_exception($e){
-		$exception['mensaje'] = $e->getMessage();
-		$exception['linea']   = $e->getLine();
-		$exception['trace']   = $e->getTrace();
+	$exception['mensaje'] = $e->getMessage();
+	$exception['linea']   = $e->getLine();
+	$exception['trace']   = $e->getTrace();
 
-		imprimir($exception);
+	imprimir($exception);
 }
 
 set_exception_handler('controlador_exception');
@@ -186,8 +186,8 @@ function mensaje_html($mensaje, $tipo = ''){
 		}
 
 		$html = '	<div class="'.$clase.'">
-								<p>'.$mensaje.'<p>
-							</div>';
+						<p>'.$mensaje.'<p>
+					</div>';
 
 		return $html;
 
@@ -218,7 +218,7 @@ function admin_head($class = ''){
 						<!-- START PAGE CONTAINER -->
 						<div class="page-container">';
 
-		if(!empty($_SESSION['usuario'])){
+		if(!empty($_SESSION['user'])){
 			$html .= admin_menu();
 		}
 
@@ -239,27 +239,28 @@ function admin_build_page($params, $body){
 }
 
 
-function validar_usuario($nombre, $password){
+function validar_usuario($name, $password){
 	try{
 			$password = hash('sha256', $password);
-			$usuario = sql_get('SELECT `id`,
-									   `status`,
-									   `nombre`,
-									   `descripcion`,
-									   `email`,
-									   `rango`,
-									   `imagen`
 
-								FROM   `usuarios`
+			$user = sql_get('SELECT `id`,
+									`status`,
+									`name`,
+									`description`,
+									`email`,
+									`role_id`,
+									`image`
 
-								WHERE  `nombre`   = "'.$nombre.'"
-							    AND    `password` = "'.$password.'"');
+							 FROM   `users`
 
-			if(empty($usuario)){
+							 WHERE  `name`      = "'.$name.'"
+							 AND    `cpassword` = "'.$password.'"');
+
+			if(empty($user)){
 					return false;
 			}
 
-			return $usuario;
+			return $user;
 
 	}catch(Exception $e){
 		throw new Exception('validar_usuario(): Error '.$e);
@@ -267,16 +268,16 @@ function validar_usuario($nombre, $password){
 }
 
 
-function usuario_login($usuario, $tipo = ''){
+function usuario_login($user, $tipo = ''){
 		if($tipo == 'admin'){
-				if($usuario['rango'] != 1){
-					throw new Exception('Error no eres administrador');
-				}
+			if($user['role_id'] != 1){
+				throw new Exception('Error no eres administrador');
+			}
 		}
 
 		session_start();
 
-		$_SESSION['usuario'] = $usuario;
+		$_SESSION['user'] = $user;
 
 		header('Location: index.php');
 }
@@ -286,11 +287,11 @@ function admin_redirect(){
 	try{
 		session_start();
 
-		if(empty($_SESSION['usuario'])){
+		if(empty($_SESSION['user'])){
 			header('Location: login.php');
 		}
 
-		if($_SESSION['usuario']['rango'] != 1){
+		if($_SESSION['user']['role_id'] != 1){
 			header('Location: login.php');
 		}
 
@@ -301,7 +302,7 @@ function admin_redirect(){
 
 
 function admin_menu(){
-	$avatar = $_SESSION['usuario']['imagen'];
+	$avatar = $_SESSION['user']['image'];
 
 	if($avatar){
 		$avatar = '/admin/img/'.$avatar;
@@ -320,11 +321,11 @@ function admin_menu(){
 						</li>
 						<li class="xn-profile">
 							<a href="#" class="profile-mini">
-								<img src="'.$avatar.'" alt="John Doe"/>
+								<img src="'.$avatar.'"/>
 							</a>
 							<div class="profile">
 								<div class="profile-image">
-									<img src="'.$avatar.'" alt="John Doe"/>
+									<img src="'.$avatar.'"/>
 								</div>
 								<div class="profile-data">
 									<div class="profile-data-name">'.$_SESSION['usuario']['nombre'].'</div>
@@ -370,7 +371,7 @@ function html_select($opciones, $nombre = '', $clase = '', $selected = ''){
 			}else{
 				$html .= '<option value="'.$llave.'">'.$valor.'</option>';
 			}
-			
+
 		}
 
 		$html .= '</select>';

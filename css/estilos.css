@@ -272,10 +272,10 @@ footer div > div img{
 }
 
 .mensaje-exito{
-	background-color: #dff0d8;
-  border: 1px solid #d6e9c6;
-  color: #468847;
-  text-align: left;
+	background-color: #7ac15d;
+	border: 1px solid #d6e9c6;
+	color: #468847;
+	text-align: left;
 	padding: 10px;
 	border-radius: 10px;
 }
