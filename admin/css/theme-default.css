@@ -7380,6 +7380,11 @@ input:invalid{
   border: 1px solid red;
 }
 
+
 input:valid {
   border: 1px solid green;
+}
+
+.login-container .login-box .login-body{
+  margin-left: -110px;
 }

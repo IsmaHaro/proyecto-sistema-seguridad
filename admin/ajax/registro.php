@@ -1,5 +1,8 @@
 <?php
 require_once(dirname(__FILE__).'/../../libs/custom.php');
+//set_include_path(get_include_path() . PATH_SEPARATOR . 'phpseclib');
+include(dirname(__FILE__).'/../phpclib/Crypt/RSA.php');
+//include('Crypt/RSA.php');
 
 $result = array();
 
@@ -7,7 +10,14 @@ if(isset($_POST['name']) and isset($_POST['email']) and isset($_POST['password']
     /*
      * Registramos
      */
-    $password = hash('sha256', $_POST['password']);
+    //$password = hash('sha256', $_POST['password']);
+    $privatekey  = file_get_contents('../phpclib/private.key');
+    $rsa         = new Crypt_RSA();
+    $rsa->loadKey($privatekey);
+
+    $rsa->setEncryptionMode(CRYPT_RSA_ENCRYPTION_PKCS1);
+    $password = $rsa->encrypt($_POST['password']);
+
 
     try{
         sql_query('INSERT INTO `users` (`name`             , `cpassword`    , `ncpassword`            , `email`              , `role_id`)
